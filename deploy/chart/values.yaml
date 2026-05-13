@@ -1,0 +1,92 @@
+replicaCount: 1
+
+image:
+  repository: registry.joysontech.com/library/c6-hackathon
+  tag: "0.1.0-20260510-a6124ae"
+  pullPolicy: Always
+
+imagePullSecrets:
+  - name: harbor-pull-secret
+
+nameOverride: ""
+fullnameOverride: ""
+
+service:
+  type: ClusterIP
+  port: 8000
+
+ingress:
+  enabled: true
+  host: opsgpt.joysontech.com
+  certManager:
+    enabled: true
+    issuerKind: ClusterIssuer
+    issuerName: letsencrypt-prod
+  traefik:
+    # Both required for LE HTTP-01 to work behind Traefik's global redirect.
+    entryPoints:
+      - web
+      - websecure
+
+resources:
+  requests:
+    cpu: 100m
+    memory: 256Mi
+  limits:
+    cpu: 1000m
+    memory: 1Gi
+
+# Plain (non-secret) container env.
+env:
+  PORT: "8000"
+  CORS_ORIGINS: "https://opsgpt.joysontech.com"
+  OPENROUTER_BASE_URL: "https://openrouter.ai/api/v1"
+  # Default model (per-request override via X-OpenRouter-Model header). Also
+  # used by the cost tracker as a pricing fallback when OpenRouter returns
+  # a dated/reordered model id (e.g. claude-4.5-sonnet-20250929).
+  OPENROUTER_MODEL: "anthropic/claude-sonnet-4.5"
+
+# OpenRouter API key is supplied per-user from the Settings UI. The chart
+# still envFrom's a K8s Secret called `c6-hackathon-secrets` for any
+# server-side defaults (LANGSMITH_TRACING + LANGSMITH_API_KEY for the
+# tracing dashboard, etc). Create the Secret out-of-band:
+#   kubectl create secret generic c6-hackathon-secrets -n c6-hackathon \
+#     --from-literal=LANGSMITH_TRACING=true \
+#     --from-literal=LANGSMITH_API_KEY=lsv2_...
+existingSecret: c6-hackathon-secrets
+
+externalSecret:
+  enabled: false
+  vaultPath: c6-hackathon
+  secretStoreName: vault
+  secretStoreKind: ClusterSecretStore
+  refreshInterval: 1h
+
+podSecurityContext:
+  runAsNonRoot: true
+  runAsUser: 65532
+  runAsGroup: 65532
+  fsGroup: 65532
+  seccompProfile:
+    type: RuntimeDefault
+
+containerSecurityContext:
+  allowPrivilegeEscalation: false
+  readOnlyRootFilesystem: true
+  capabilities:
+    drop:
+      - ALL
+
+nodeSelector: {}
+tolerations: []
+affinity: {}
+
+podLabels: {}
+podAnnotations: {}
+
+# Kyverno require-labels expects app/team/env. Emitted via _helpers.tpl.
+labels:
+  partOf: c6-hackathon
+  component: api
+  team: hackathon
+  env: production

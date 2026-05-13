@@ -1,0 +1,53 @@
+[
+  {
+    "case_id": "payment_errors",
+    "description": "Payment API errors with 5xx and backend failure symptoms",
+    "input_file": "Sample_logs/payment_errors.log",
+    "expected": {
+      "severity": "critical",
+      "routing_path_contains": "critical",
+      "rag_expected": true,
+      "rag_confidence": "high",
+      "validator_status": "approved",
+      "report_present": true
+    }
+  },
+  {
+    "case_id": "disk_full",
+    "description": "Disk full incident requiring runbook-backed remediation",
+    "input_file": "Sample_logs/disk_full.log",
+    "expected": {
+      "severity": "critical",
+      "routing_path_contains": "critical",
+      "rag_expected": true,
+      "rag_source_contains_any": ["disk"],
+      "validator_status": "approved",
+      "report_present": true
+    }
+  },
+  {
+    "case_id": "website_slow",
+    "description": "Website slowness / database-related incident",
+    "input_file": "Sample_logs/website_slow.log",
+    "expected": {
+      "severity": "high",
+      "severity_any_of": ["high", "critical"],
+      "routing_path_contains": "critical",
+      "rag_expected": true,
+      "rag_source_contains_any": ["db", "database"],
+      "validator_status": "approved",
+      "report_present": true
+    }
+  },
+  {
+    "case_id": "health_check",
+    "description": "Healthy service log should follow info summary path",
+    "inline_log": "INFO health check successful. 200 OK. service heartbeat normal.",
+    "expected": {
+      "severity": "info",
+      "routing_path_contains": "info_summary_only",
+      "rag_expected": false,
+      "report_present": true
+    }
+  }
+]

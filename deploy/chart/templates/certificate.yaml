@@ -1,0 +1,21 @@
+{{- if and .Values.ingress.enabled .Values.ingress.certManager.enabled }}
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: {{ include "c6-hackathon.fullname" . }}-tls
+  labels:
+    {{- include "c6-hackathon.labels" . | nindent 4 }}
+  annotations:
+    # Issue a self-signed temp cert immediately so Traefik can complete TLS
+    # handshakes during cert-manager's HTTP-01 self-check. Without this, the
+    # self-check follows Traefik's global HTTP→HTTPS redirect and hangs against
+    # an empty TLS listener — the cert never gets issued. LE replaces the stub.
+    cert-manager.io/issue-temporary-certificate: "true"
+spec:
+  secretName: {{ include "c6-hackathon.fullname" . }}-tls
+  issuerRef:
+    kind: {{ .Values.ingress.certManager.issuerKind }}
+    name: {{ .Values.ingress.certManager.issuerName }}
+  dnsNames:
+    - {{ .Values.ingress.host }}
+{{- end }}

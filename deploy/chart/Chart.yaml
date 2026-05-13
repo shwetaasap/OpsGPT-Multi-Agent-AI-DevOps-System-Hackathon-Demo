@@ -1,0 +1,13 @@
+apiVersion: v2
+name: c6-hackathon
+description: Multi-Agent DevOps Incident Analysis Suite — FastAPI + LangGraph + React
+type: application
+version: 0.1.0
+appVersion: "0.1.0"
+keywords:
+  - langgraph
+  - openrouter
+  - incident-analysis
+  - devops
+maintainers:
+  - name: joyson-fernandes

@@ -1,0 +1,21 @@
+langgraph>=0.2.50
+langchain-openai>=0.2.0
+langchain-core>=0.3.0
+openai>=1.0.0
+langsmith>=0.1.0
+fastapi>=0.115.0
+uvicorn[standard]>=0.32.0
+pydantic>=2.9.0
+python-dotenv>=1.0.0
+rank-bm25>=0.2.2
+pytest>=8.0.0
+
+# Pin transitive build-tool packages to patched versions (CVE-2026-23949,
+# CVE-2026-24049). These come in via setuptools/pip — not imported by us
+# but Trivy scans every dist-info in the image.
+jaraco.context>=6.1.0
+wheel>=0.46.2
+
+# Optional future real Slack/JIRA clients. Current demo mode uses mock outputs.
+# slack-sdk>=3.33.0
+# atlassian-python-api>=3.41.0

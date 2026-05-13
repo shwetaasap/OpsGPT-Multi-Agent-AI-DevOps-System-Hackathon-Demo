@@ -1,0 +1,23 @@
+{{- if .Values.ingress.enabled }}
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: {{ include "c6-hackathon.fullname" . }}
+  labels:
+    {{- include "c6-hackathon.labels" . | nindent 4 }}
+spec:
+  # Both `web` and `websecure` are required so cert-manager's HTTP-01 ACME
+  # challenge can reach the cm-acme-http-solver. Without an explicit web
+  # entrypoint route for this host, Traefik's global redirect (web → websecure)
+  # catches the challenge and the self-check fails (HTTPS has no valid cert yet).
+  entryPoints:
+    {{- toYaml .Values.ingress.traefik.entryPoints | nindent 4 }}
+  routes:
+    - match: Host(`{{ .Values.ingress.host }}`)
+      kind: Rule
+      services:
+        - name: {{ include "c6-hackathon.fullname" . }}
+          port: {{ .Values.service.port }}
+  tls:
+    secretName: {{ include "c6-hackathon.fullname" . }}-tls
+{{- end }}

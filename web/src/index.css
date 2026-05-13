@@ -1,0 +1,219 @@
+@import "tailwindcss";
+
+/* --- Geist variable fonts (local) ---------------------------------------- */
+
+@font-face {
+  font-family: "Geist";
+  font-weight: 100 900;
+  font-display: swap;
+  font-style: normal;
+  src: url("../node_modules/geist/dist/fonts/geist-sans/Geist-Variable.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "Geist Mono";
+  font-weight: 100 900;
+  font-display: swap;
+  font-style: normal;
+  src: url("../node_modules/geist/dist/fonts/geist-mono/GeistMono-Variable.woff2") format("woff2");
+}
+
+/* --- HSL design tokens — single source of truth for both themes ---------- */
+
+:root {
+  /* Surface */
+  --background: 224 71% 4%;
+  --foreground: 210 20% 98%;
+  --card: 224 71% 6%;
+  --card-foreground: 210 20% 98%;
+  --popover: 224 71% 5%;
+  --popover-foreground: 210 20% 98%;
+
+  /* Brand */
+  --primary: 217 91% 60%;
+  --primary-foreground: 210 20% 98%;
+
+  /* Subtle backgrounds */
+  --secondary: 215 28% 17%;
+  --secondary-foreground: 210 20% 98%;
+  --muted: 215 28% 12%;
+  --muted-foreground: 217 11% 65%;
+  --accent: 215 28% 17%;
+  --accent-foreground: 210 20% 98%;
+
+  /* Semantic */
+  --destructive: 0 84% 60%;
+  --destructive-foreground: 210 20% 98%;
+  --warning: 45 93% 47%;
+  --warning-foreground: 224 71% 4%;
+  --success: 158 64% 45%;
+  --success-foreground: 210 20% 98%;
+  --info: 217 91% 60%;
+  --info-foreground: 210 20% 98%;
+
+  /* Severity (single source of truth) */
+  --sev-p0: 0 84% 60%;
+  --sev-p1: 25 95% 53%;
+  --sev-p2: 45 93% 47%;
+  --sev-p3: 217 91% 60%;
+  --sev-p4: 158 64% 45%;
+
+  /* Form / borders */
+  --border: 215 28% 14%;
+  --input: 215 28% 14%;
+  --ring: 217 91% 60%;
+  --radius: 0.625rem;
+}
+
+:root.light {
+  --background: 0 0% 100%;
+  --foreground: 224 71% 4%;
+  --card: 0 0% 100%;
+  --card-foreground: 224 71% 4%;
+  --popover: 0 0% 100%;
+  --popover-foreground: 224 71% 4%;
+  --primary: 217 91% 50%;
+  --primary-foreground: 210 20% 98%;
+  --secondary: 220 14% 96%;
+  --secondary-foreground: 224 71% 4%;
+  --muted: 220 14% 96%;
+  --muted-foreground: 220 9% 46%;
+  --accent: 220 14% 96%;
+  --accent-foreground: 224 71% 4%;
+  --destructive: 0 84% 55%;
+  --destructive-foreground: 210 20% 98%;
+  --border: 220 13% 91%;
+  --input: 220 13% 91%;
+  --ring: 217 91% 50%;
+
+  --sev-p0: 0 84% 55%;
+  --sev-p1: 25 95% 50%;
+  --sev-p2: 38 92% 45%;
+  --sev-p3: 217 91% 50%;
+  --sev-p4: 158 64% 40%;
+}
+
+/* --- Tailwind theme bridge ------------------------------------------------ */
+
+@theme inline {
+  --color-background: hsl(var(--background));
+  --color-foreground: hsl(var(--foreground));
+  --color-card: hsl(var(--card));
+  --color-card-foreground: hsl(var(--card-foreground));
+  --color-popover: hsl(var(--popover));
+  --color-popover-foreground: hsl(var(--popover-foreground));
+  --color-primary: hsl(var(--primary));
+  --color-primary-foreground: hsl(var(--primary-foreground));
+  --color-secondary: hsl(var(--secondary));
+  --color-secondary-foreground: hsl(var(--secondary-foreground));
+  --color-muted: hsl(var(--muted));
+  --color-muted-foreground: hsl(var(--muted-foreground));
+  --color-accent: hsl(var(--accent));
+  --color-accent-foreground: hsl(var(--accent-foreground));
+  --color-destructive: hsl(var(--destructive));
+  --color-destructive-foreground: hsl(var(--destructive-foreground));
+  --color-warning: hsl(var(--warning));
+  --color-warning-foreground: hsl(var(--warning-foreground));
+  --color-success: hsl(var(--success));
+  --color-success-foreground: hsl(var(--success-foreground));
+  --color-info: hsl(var(--info));
+  --color-info-foreground: hsl(var(--info-foreground));
+
+  --color-border: hsl(var(--border));
+  --color-input: hsl(var(--input));
+  --color-ring: hsl(var(--ring));
+
+  --color-sev-p0: hsl(var(--sev-p0));
+  --color-sev-p1: hsl(var(--sev-p1));
+  --color-sev-p2: hsl(var(--sev-p2));
+  --color-sev-p3: hsl(var(--sev-p3));
+  --color-sev-p4: hsl(var(--sev-p4));
+
+  --font-sans: "Geist", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "Geist Mono", ui-monospace, SFMono-Regular, "Menlo", monospace;
+
+  --radius-lg: var(--radius);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-sm: calc(var(--radius) - 4px);
+
+  /* Animations used by Radix-based primitives */
+  --animate-accordion-down: accordion-down 0.2s ease-out;
+  --animate-accordion-up: accordion-up 0.2s ease-out;
+  --animate-fade-in: fade-in 0.2s ease-out;
+  --animate-fade-out: fade-out 0.15s ease-in;
+  --animate-zoom-in: zoom-in 0.2s ease-out;
+  --animate-slide-in-right: slide-in-right 0.25s cubic-bezier(0.32, 0.72, 0, 1);
+  --animate-slide-out-right: slide-out-right 0.2s cubic-bezier(0.32, 0.72, 0, 1);
+}
+
+@keyframes accordion-down {
+  from { height: 0; }
+  to   { height: var(--radix-accordion-content-height); }
+}
+@keyframes accordion-up {
+  from { height: var(--radix-accordion-content-height); }
+  to   { height: 0; }
+}
+@keyframes fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+@keyframes fade-out {
+  from { opacity: 1; }
+  to   { opacity: 0; }
+}
+@keyframes zoom-in {
+  from { opacity: 0; transform: scale(0.96); }
+  to   { opacity: 1; transform: scale(1); }
+}
+@keyframes slide-in-right {
+  from { transform: translateX(100%); }
+  to   { transform: translateX(0); }
+}
+@keyframes slide-out-right {
+  from { transform: translateX(0); }
+  to   { transform: translateX(100%); }
+}
+
+/* --- Base layer ----------------------------------------------------------- */
+
+@layer base {
+  * {
+    border-color: hsl(var(--border));
+  }
+  html {
+    color-scheme: dark;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  html.light {
+    color-scheme: light;
+  }
+  body {
+    background: hsl(var(--background));
+    color: hsl(var(--foreground));
+    font-family: var(--font-sans);
+    font-feature-settings: "rlig" 1, "calt" 1, "ss01" 1;
+  }
+  /* Numeric / mono treatments lean tabular for steady stat alignment. */
+  .tabular-nums {
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+/* --- Custom scrollbar (token-driven so light mode auto-applies) ---------- */
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: hsl(var(--background));
+}
+::-webkit-scrollbar-thumb {
+  background: hsl(var(--border));
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: hsl(var(--muted-foreground) / 0.4);
+}
